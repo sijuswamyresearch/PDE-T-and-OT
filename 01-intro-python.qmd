@@ -92,7 +92,7 @@ print("Solution:", x)
 ```
 #### Plotting Graphs with Matplotlib
 
-Matplotlib is used for simple visualizations.
+`Matplotlib` is used for simple visualizations.
 Install using: `pip install matplotlib`
 ```{python}
 #Plotting a sine wave 
@@ -256,6 +256,7 @@ plt.show()
 **Concept:** Real-world sensor data is never perfect. It's often corrupted by random noise. We can simulate this by adding a random component to our ideal signal.
 
 **Python Skills:**
+
 - Array Addition: Simply using + to add two arrays of the same shape.
 
 - `np.random.normal()`: To generate Gaussian noise, which is a common model for electronic noise.
@@ -462,5 +463,236 @@ plt.grid(True)
 plt.show()
 ```
 
+## Module-I Bridge: From Python basics to PDEs
+
+Now that you have mastered `NumPy`, `Matplotlib`, and `SymPy`, we will use these exact tools to visualize and solve the first major topic of your theory syllabus: Formation of Partial Differential Equations.
+
+### The Mathematics Behind the Code
+
+In your theory class, you will learn that a surface like a plane:
+$$z=ax+by+k$$
+(where $a$,$b$ are arbitrary constants, and $k$ is system parameter) can be differentiated to eliminate these constants.
+
+**Step 1:** Find the partial derivatives:
+
+\begin{align*}
+p&=a\\
+q&=b
+\end{align*}
+
+**Step 2:** Substitute $a$and $b$ back into $z=ax+by+k$, we get
+
+$px+qy-z+c=0$.
+
+:::{.callout-note}
+### Key Insight
+ A single PDE represents an infinite family of surfaces. Every possible value of the arbitrary variable gives a different plane, but they will obey the same PDE!
+:::
+
+### Visualizing the Family of Planes (Interactive Demo)
+
+The code below creates an interactive 3D plot of the plane $x=ax+by+k$. Use the sliders to change
+$a$ and $b$. and watch the plane tilt. The text box on the left shows the partial derivatives and verifies that the PDE $px+qy-z+k=0$ always equals zero.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.widgets import Slider
+
+# ==========================================
+# Step 1: SETUP THE 3D FIGURE & GRID
+# ==========================================
+fig = plt.figure(figsize=(10, 8))
+ax = fig.add_subplot(111, projection='3d')
+plt.subplots_adjust(bottom=0.25)
+
+# Create the spatial coordinates (x, y)
+x = np.linspace(-10, 10, 20)
+y = np.linspace(-10, 10, 20)
+X, Y = np.meshgrid(x, y)
+
+# Initial arbitrary constants
+a_init = 1.0
+b_init = 1.0
+k_const = 5.0
+
+def calculate_surface(a, b, k):
+    return k - a * X - b * Y
+
+# ==========================================
+# Step 2. INITIAL PLOT & TEXT ANNOTATION
+# ==========================================
+Z = calculate_surface(a_init, b_init, k_const)
+surf = ax.plot_surface(X, Y, Z, cmap='plasma', alpha=0.8)
+
+def format_axes():
+    ax.set_xlabel('Spatial X')
+    ax.set_ylabel('Spatial Y')
+    ax.set_zlabel('Voltage (Z)')
+    ax.set_title('Family of Planes: ax + by + z = k')
+    ax.set_zlim(-30, 30)
+
+format_axes()
+
+# Text box
+props = dict(boxstyle='round', facecolor='white', alpha=0.9, edgecolor='gray')
+text_box = fig.text(0.05, 0.90, '', transform=fig.transFigure, fontsize=11,
+                    verticalalignment='top', family='monospace', bbox=props)
+
+def update_text(a, b):
+    p = -a  # dz/dx
+    q = -b  # dz/dy
+    text_str = (f"Current Constants:\n"
+                f"a = {a:5.2f}  |  b = {b:5.2f}\n\n"
+                f"Partial Derivatives:\n"
+                f"p (dz/dx) = {p:5.2f}\n"
+                f"q (dz/dy) = {q:5.2f}\n\n"
+                f"Checking the formulated PDE:\n"
+                f"px + qy - z + k = 0.00")
+    text_box.set_text(text_str)
+
+update_text(a_init, b_init)
+
+# ==========================================
+# Step 3. INTERACTIVE SLIDERS
+# ==========================================
+axcolor = 'lightgray'
+ax_a = plt.axes([0.2, 0.15, 0.65, 0.03], facecolor=axcolor)
+ax_b = plt.axes([0.2, 0.10, 0.65, 0.03], facecolor=axcolor)
+
+slider_a = Slider(ax_a, 'Constant a', -3.0, 3.0, valinit=a_init)
+slider_b = Slider(ax_b, 'Constant b', -3.0, 3.0, valinit=b_init)
+
+def update(val):
+    a = slider_a.val
+    b = slider_b.val
+    ax.clear()
+    Z_new = calculate_surface(a, b, k_const)
+    ax.plot_surface(X, Y, Z_new, cmap='plasma', alpha=0.8)
+    format_axes()
+    update_text(a, b)
+    fig.canvas.draw_idle()
+
+slider_a.on_changed(update)
+slider_b.on_changed(update)
+
+plt.show()
+```
+
+### The ECE Bridge: What do 'a' and 'b' mean in your domain?
+
+The variables $a$ and $b$ are not just abstract numbers—they have physical meaning in your field.
+Consider a 2D PCB copper plane (like a ground plane). The voltage $V(x,y)$ drops linearly due to the resistance of the copper. Using Ohm's law in 2D:
+$$ V(x,y)=V_0-E_x\cdot x-E_y \cdot y$$
+
+where $E_x$ and $E_y$ are the electric field components (voltage gradients) in the x and y directions. Comparing this with our plane equation, we can see that:
+
+- $a$ corresponds to the negative of the electric field in the x-direction ($E_x$).
+- $b$ corresponds to the negative of the electric field in the y-direction ($E_y$).
+- $k$ represents the initial voltage $V_0$ at the origin.   
+
+The PDE $px+qy-z+k=0$ now describes the fundamental relationship between voltage gradients and the voltage distribution in any resistive medium. This is the same math that governs current flow in your PCBs!
+
+Here is the interactive demo that shows how changing $a$ and $b$ (the electric field components) affects the voltage distribution across the plane.
+
+```python
+# ==========================================
+# COMPANION CODE: ECE INTERPRETATION OF PDE
+# 2D Voltage Drop in a PCB Plane (Ohm's Law)
+# ==========================================
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.widgets import Slider
+
+fig = plt.figure(figsize=(10, 8))
+ax = fig.add_subplot(111, projection='3d')
+plt.subplots_adjust(bottom=0.25)
+
+# PCB dimensions (in cm)
+x = np.linspace(0, 10, 30)
+y = np.linspace(0, 10, 30)
+X, Y = np.meshgrid(x, y)
+
+# Physical parameters (mapped from arbitrary constants)
+# a = Voltage gradient in X (V/cm)  →  E_x = -dV/dx
+# b = Voltage gradient in Y (V/cm)  →  E_y = -dV/dy
+a_init = 0.5  # V/cm
+b_init = 0.3  # V/cm
+V_ref = 5.0   # Reference voltage at origin (Volts)
+
+def calculate_pcb_voltage(a, b, V0):
+    # V(x,y) = V0 - a*x - b*y  (Linear voltage drop)
+    return V0 - a * X - b * Y
+
+Z = calculate_pcb_voltage(a_init, b_init, V_ref)
+surf = ax.plot_surface(X, Y, Z, cmap='viridis', alpha=0.8)
+
+ax.set_xlabel('X position on PCB (cm)')
+ax.set_ylabel('Y position on PCB (cm)')
+ax.set_zlabel('Voltage (V)')
+ax.set_title('2D Voltage Distribution on a PCB Ground Plane')
+ax.set_zlim(0, 6)
+
+# Info box showing ECE interpretation
+props = dict(boxstyle='round', facecolor='lightblue', alpha=0.9)
+text_box = fig.text(0.05, 0.85, '', transform=fig.transFigure, fontsize=10, 
+                    verticalalignment='top', family='monospace', bbox=props)
+
+def update_text(a, b):
+    # Electric field components (negative gradient)
+    Ex = a   # E_x = -dV/dx = a
+    Ey = b   # E_y = -dV/dy = b
+    text_str = (f"⚡ ECE Interpretation ⚡\n"
+                f"Voltage gradient in X (a): {a:.2f} V/cm\n"
+                f"Voltage gradient in Y (b): {b:.2f} V/cm\n\n"
+                f"Electric Field Components:\n"
+                f"E_x = -dV/dx = {a:.2f} V/cm\n"
+                f"E_y = -dV/dy = {b:.2f} V/cm\n\n"
+                f"📐 The PDE governing this:\n"
+                f"∂V/∂x + ∂V/∂y = -({a+b:.2f}) V/cm\n"
+                f"(This is a form of Laplace's equation)")
+    text_box.set_text(text_str)
+
+update_text(a_init, b_init)
+
+# Sliders (now labeled with physical units)
+ax_a = plt.axes([0.2, 0.15, 0.65, 0.03], facecolor='lightgray')
+ax_b = plt.axes([0.2, 0.10, 0.65, 0.03], facecolor='lightgray')
+
+slider_a = Slider(ax_a, 'Gradient a (V/cm)', 0.0, 1.5, valinit=a_init)
+slider_b = Slider(ax_b, 'Gradient b (V/cm)', 0.0, 1.5, valinit=b_init)
+
+def update(val):
+    a = slider_a.val
+    b = slider_b.val
+    ax.clear()
+    Z_new = calculate_pcb_voltage(a, b, V_ref)
+    ax.plot_surface(X, Y, Z_new, cmap='viridis', alpha=0.8)
+    ax.set_xlabel('X position on PCB (cm)')
+    ax.set_ylabel('Y position on PCB (cm)')
+    ax.set_zlabel('Voltage (V)')
+    ax.set_title('2D Voltage Distribution on a PCB Ground Plane')
+    ax.set_zlim(0, 6)
+    update_text(a, b)
+    fig.canvas.draw_idle()
+
+slider_a.on_changed(update)
+slider_b.on_changed(update)
+
+plt.show()
+```
+
+
+### Day-1 Skills Map to Module-I
+
+Before we jump into the challenges, look at how your practice tasks prepared you for this:
+
+| Day-1 Skill | How it applies to Module-I PDEs |
+| :--- | :--- |
+| T-1 (Sine wave with `np.linspace`) | You will use np.linspace to create spatial grids (x, y) for 2D PDE problems. |
+| T-3 (Robot arm kinematics) | Finding the "characteristic curves" in Lagrange's method is exactly like following the robot's joints—you trace a path to find the solution. |
+| T-4 (Rotation matrix) | Changing variables in PDEs (like separation of variables) is a coordinate transformation, just like rotating a sensor frame! |
+| T-5 (Moving average filter) | Numerical methods for PDEs (like Finite Difference) use sliding windows over the grid, similar to your filtering loop. |
+| `sympy.pdsolve` (Basic example) | You already solved ∂u/∂x + ∂u/∂t = 0. Now you will solve real engineering PDEs. |
 
 

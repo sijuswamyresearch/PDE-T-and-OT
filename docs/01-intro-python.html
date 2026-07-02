@@ -106,6 +106,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -305,6 +334,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#t-4-rotating-a-sensors-coordinate-frame" id="toc-t-4-rotating-a-sensors-coordinate-frame" class="nav-link" data-scroll-target="#t-4-rotating-a-sensors-coordinate-frame"><span class="header-section-number">2.2.4</span> T-4: Rotating a Sensor’s Coordinate Frame</a></li>
   <li><a href="#t-5-applying-a-simple-digital-filter" id="toc-t-5-applying-a-simple-digital-filter" class="nav-link" data-scroll-target="#t-5-applying-a-simple-digital-filter"><span class="header-section-number">2.2.5</span> T-5: Applying a Simple Digital Filter</a></li>
   </ul></li>
+  <li><a href="#module-i-bridge-from-python-basics-to-pdes" id="toc-module-i-bridge-from-python-basics-to-pdes" class="nav-link" data-scroll-target="#module-i-bridge-from-python-basics-to-pdes"><span class="header-section-number">2.3</span> 🚀 MODULE-I BRIDGE: FROM PYTHON BASICS TO PDEs</a>
+  <ul class="collapse">
+  <li><a href="#the-mathematics-behind-the-code" id="toc-the-mathematics-behind-the-code" class="nav-link" data-scroll-target="#the-mathematics-behind-the-code"><span class="header-section-number">2.3.1</span> The Mathematics Behind the Code</a></li>
+  <li><a href="#visualizing-the-family-of-planes-interactive-demo" id="toc-visualizing-the-family-of-planes-interactive-demo" class="nav-link" data-scroll-target="#visualizing-the-family-of-planes-interactive-demo"><span class="header-section-number">2.3.2</span> Visualizing the Family of Planes (Interactive Demo)</a></li>
+  <li><a href="#the-ece-bridge-what-do-a-and-b-mean-in-your-domain" id="toc-the-ece-bridge-what-do-a-and-b-mean-in-your-domain" class="nav-link" data-scroll-target="#the-ece-bridge-what-do-a-and-b-mean-in-your-domain"><span class="header-section-number">2.3.3</span> The ECE Bridge: What do ‘a’ and ‘b’ mean in your domain?</a></li>
+  <li><a href="#day-1-skills-map-to-module-i" id="toc-day-1-skills-map-to-module-i" class="nav-link" data-scroll-target="#day-1-skills-map-to-module-i"><span class="header-section-number">2.3.4</span> Day-1 Skills Map to Module-I</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -355,7 +391,7 @@ Starting <code>Python</code> coding with <code>colab</code>
 <section id="hello-world" class="level4" data-number="2.1.1.1">
 <h4 data-number="2.1.1.1" class="anchored" data-anchor-id="hello-world"><span class="header-section-number">2.1.1.1</span> Hello World</h4>
 <p>The classic first program for any language.</p>
-<div id="d168afd2" class="cell" data-execution_count="1">
+<div id="c0eb2d63" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Hello, B.Tech Students!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -368,7 +404,7 @@ Starting <code>Python</code> coding with <code>colab</code>
 <section id="variables-and-data-types" class="level4" data-number="2.1.1.2">
 <h4 data-number="2.1.1.2" class="anchored" data-anchor-id="variables-and-data-types"><span class="header-section-number">2.1.1.2</span> Variables and Data Types</h4>
 <p>Introduction to different data types like integers, floats, and strings.</p>
-<div id="b0c1b088" class="cell" data-execution_count="2">
+<div id="916a66ac" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span>  <span class="co"># Integer</span></span>
@@ -386,7 +422,7 @@ Starting <code>Python</code> coding with <code>colab</code>
 <section id="conditional-statements" class="level4" data-number="2.1.1.3">
 <h4 data-number="2.1.1.3" class="anchored" data-anchor-id="conditional-statements"><span class="header-section-number">2.1.1.3</span> Conditional Statements</h4>
 <p>Using if, elif, and else statements.</p>
-<div id="1fdd0f3f" class="cell" data-execution_count="3">
+<div id="9376cbac" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span>  <span class="co"># Integer</span></span>
@@ -405,7 +441,7 @@ Starting <code>Python</code> coding with <code>colab</code>
 <section id="loops-iteratives" class="level4" data-number="2.1.1.4">
 <h4 data-number="2.1.1.4" class="anchored" data-anchor-id="loops-iteratives"><span class="header-section-number">2.1.1.4</span> Loops/ Iteratives</h4>
 <p>Using <code>for</code> and <code>while</code> loops.</p>
-<div id="c3eca104" class="cell" data-execution_count="4">
+<div id="045968ad" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For loop</span></span>
@@ -420,7 +456,7 @@ Iteration: 3
 Iteration: 4</code></pre>
 </div>
 </div>
-<div id="7b3b00b0" class="cell" data-execution_count="5">
+<div id="c5875565" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># While loop</span></span>
@@ -439,7 +475,7 @@ While loop iteration: 2</code></pre>
 <section id="functions" class="level4" data-number="2.1.1.5">
 <h4 data-number="2.1.1.5" class="anchored" data-anchor-id="functions"><span class="header-section-number">2.1.1.5</span> Functions</h4>
 <p>Defining and calling functions.</p>
-<div id="db7a1adb" class="cell" data-execution_count="6">
+<div id="ca3e917d" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add_numbers(a, b):</span>
@@ -456,7 +492,7 @@ While loop iteration: 2</code></pre>
 <section id="basic-numerical-computations-using-numpy" class="level4" data-number="2.1.1.6">
 <h4 data-number="2.1.1.6" class="anchored" data-anchor-id="basic-numerical-computations-using-numpy"><span class="header-section-number">2.1.1.6</span> Basic Numerical Computations using <code>NumPy</code></h4>
 <p><code>NumPy</code> is useful for numerical operations.</p>
-<div id="6af29e78" class="cell" data-execution_count="7">
+<div id="03740263" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Solve 2x+3y=54x+4y=6</span></span>
@@ -475,8 +511,8 @@ While loop iteration: 2</code></pre>
 </section>
 <section id="plotting-graphs-with-matplotlib" class="level4" data-number="2.1.1.7">
 <h4 data-number="2.1.1.7" class="anchored" data-anchor-id="plotting-graphs-with-matplotlib"><span class="header-section-number">2.1.1.7</span> Plotting Graphs with Matplotlib</h4>
-<p>Matplotlib is used for simple visualizations. Install using: <code>pip install matplotlib</code></p>
-<div id="83af2f7b" class="cell" data-execution_count="8">
+<p><code>Matplotlib</code> is used for simple visualizations. Install using: <code>pip install matplotlib</code></p>
+<div id="d03dbc37" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plotting a sine wave </span></span>
@@ -558,7 +594,7 @@ Installing <code>Scipy</code>
 <p>The <code>Scipy</code> library can be installed using the <code>pip install scipy</code> command in terminal or using <code>!pip install scipy</code> in colab.</p>
 </div>
 </div>
-<div id="c120bb07" class="cell" data-execution_count="10">
+<div id="75806e28" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Solving a Simple PDE ∂u/∂x + ∂u/∂t=0</span></span>
@@ -616,7 +652,7 @@ Figure&nbsp;2.2: Solution of PDE.
 <section id="basic-optimization-using-sympy" class="level4" data-number="2.1.1.9">
 <h4 data-number="2.1.1.9" class="anchored" data-anchor-id="basic-optimization-using-sympy"><span class="header-section-number">2.1.1.9</span> Basic Optimization Using <code>SymPy</code></h4>
 <p><code>SymPy</code> is a symbolic mathematics library that can be used to derive analytical solutions to PDEs.</p>
-<div id="7b4412ca" class="cell" data-execution_count="12">
+<div id="741d7fb1" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
@@ -690,9 +726,10 @@ Figure&nbsp;2.3: A 5V, 50 Hz sine wave sampled over time.
 <section id="t-2-modeling-a-noisy-sensor-reading" class="level3" data-number="2.2.2">
 <h3 data-number="2.2.2" class="anchored" data-anchor-id="t-2-modeling-a-noisy-sensor-reading"><span class="header-section-number">2.2.2</span> T-2: Modeling a Noisy Sensor Reading</h3>
 <p><strong>Concept:</strong> Real-world sensor data is never perfect. It’s often corrupted by random noise. We can simulate this by adding a random component to our ideal signal.</p>
-<p><strong>Python Skills:</strong> - Array Addition: Simply using + to add two arrays of the same shape.</p>
+<p><strong>Python Skills:</strong></p>
 <ul>
-<li><code>np.random.normal()</code>: To generate Gaussian noise, which is a common model for electronic noise.</li>
+<li><p>Array Addition: Simply using + to add two arrays of the same shape.</p></li>
+<li><p><code>np.random.normal()</code>: To generate Gaussian noise, which is a common model for electronic noise.</p></li>
 </ul>
 <p><strong>Task:</strong> Take the 5V sine wave from the previous example and add Gaussian noise with a standard deviation of 0.5V to simulate a noisy sensor reading.</p>
 <div id="cell-fig-noisy-signal" class="cell" data-execution_count="14">
@@ -945,6 +982,254 @@ Figure&nbsp;2.7: Noisy signal smoothed using a 5-point moving average filter.
 </div>
 </div>
 </div>
+</section>
+</section>
+<section id="module-i-bridge-from-python-basics-to-pdes" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="module-i-bridge-from-python-basics-to-pdes"><span class="header-section-number">2.3</span> 🚀 MODULE-I BRIDGE: FROM PYTHON BASICS TO PDEs</h2>
+<p>Now that you have mastered <code>NumPy</code>, <code>Matplotlib</code>, and <code>SymPy</code>, we will use these exact tools to visualize and solve the first major topic of your theory syllabus: Formation of Partial Differential Equations.</p>
+<section id="the-mathematics-behind-the-code" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="the-mathematics-behind-the-code"><span class="header-section-number">2.3.1</span> The Mathematics Behind the Code</h3>
+<p>In your theory class, you will learn that a surface like a plane: <span class="math display">\[z=ax+by+k\]</span> (where <span class="math inline">\(a\)</span>,<span class="math inline">\(b\)</span> are arbitrary constants, and <span class="math inline">\(k\)</span> is system parameter) can be differentiated to eliminate these constants.</p>
+<p><strong>Step 1:</strong> Find the partial derivatives:</p>
+<p><span class="math display">\[\begin{align*}
+p&amp;=a\\
+q&amp;=b
+\end{align*}\]</span></p>
+<p><strong>Step 2:</strong> Substitute <span class="math inline">\(a\)</span>and <span class="math inline">\(b\)</span> back into <span class="math inline">\(z=ax+by+k\)</span>, we get</p>
+<p><span class="math inline">\(px+qy-z+c=0\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Key Insight
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A single PDE represents an infinite family of surfaces. Every possible value of the arbitrary variable gives a different plane, but they will obey the same PDE!</p>
+</div>
+</div>
+</section>
+<section id="visualizing-the-family-of-planes-interactive-demo" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="visualizing-the-family-of-planes-interactive-demo"><span class="header-section-number">2.3.2</span> Visualizing the Family of Planes (Interactive Demo)</h3>
+<p>The code below creates an interactive 3D plot of the plane <span class="math inline">\(x=ax+by+k\)</span>. Use the sliders to change <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. and watch the plane tilt. The text box on the left shows the partial derivatives and verifies that the PDE <span class="math inline">\(px+qy-z+k=0\)</span> always equals zero.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.widgets <span class="im">import</span> Slider</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ==========================================</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: SETUP THE 3D FIGURE &amp; GRID</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ==========================================</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>, projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>plt.subplots_adjust(bottom<span class="op">=</span><span class="fl">0.25</span>)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the spatial coordinates (x, y)</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">20</span>)</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">20</span>)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>X, Y <span class="op">=</span> np.meshgrid(x, y)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial arbitrary constants</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>a_init <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>b_init <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>k_const <span class="op">=</span> <span class="fl">5.0</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_surface(a, b, k):</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> k <span class="op">-</span> a <span class="op">*</span> X <span class="op">-</span> b <span class="op">*</span> Y</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a><span class="co"># ==========================================</span></span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2. INITIAL PLOT &amp; TEXT ANNOTATION</span></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a><span class="co"># ==========================================</span></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> calculate_surface(a_init, b_init, k_const)</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>surf <span class="op">=</span> ax.plot_surface(X, Y, Z, cmap<span class="op">=</span><span class="st">'plasma'</span>, alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> format_axes():</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'Spatial X'</span>)</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'Spatial Y'</span>)</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>    ax.set_zlabel(<span class="st">'Voltage (Z)'</span>)</span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="st">'Family of Planes: ax + by + z = k'</span>)</span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>    ax.set_zlim(<span class="op">-</span><span class="dv">30</span>, <span class="dv">30</span>)</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>format_axes()</span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Text box</span></span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>props <span class="op">=</span> <span class="bu">dict</span>(boxstyle<span class="op">=</span><span class="st">'round'</span>, facecolor<span class="op">=</span><span class="st">'white'</span>, alpha<span class="op">=</span><span class="fl">0.9</span>, edgecolor<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>text_box <span class="op">=</span> fig.text(<span class="fl">0.05</span>, <span class="fl">0.90</span>, <span class="st">''</span>, transform<span class="op">=</span>fig.transFigure, fontsize<span class="op">=</span><span class="dv">11</span>,</span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>                    verticalalignment<span class="op">=</span><span class="st">'top'</span>, family<span class="op">=</span><span class="st">'monospace'</span>, bbox<span class="op">=</span>props)</span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_text(a, b):</span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> <span class="op">-</span>a  <span class="co"># dz/dx</span></span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> <span class="op">-</span>b  <span class="co"># dz/dy</span></span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>    text_str <span class="op">=</span> (<span class="ss">f"Current Constants:</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"a = </span><span class="sc">{</span>a<span class="sc">:5.2f}</span><span class="ss">  |  b = </span><span class="sc">{</span>b<span class="sc">:5.2f}</span><span class="ch">\n\n</span><span class="ss">"</span></span>
+<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"Partial Derivatives:</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"p (dz/dx) = </span><span class="sc">{</span>p<span class="sc">:5.2f}</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"q (dz/dy) = </span><span class="sc">{</span>q<span class="sc">:5.2f}</span><span class="ch">\n\n</span><span class="ss">"</span></span>
+<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"Checking the formulated PDE:</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"px + qy - z + k = 0.00"</span>)</span>
+<span id="cb29-55"><a href="#cb29-55" aria-hidden="true" tabindex="-1"></a>    text_box.set_text(text_str)</span>
+<span id="cb29-56"><a href="#cb29-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-57"><a href="#cb29-57" aria-hidden="true" tabindex="-1"></a>update_text(a_init, b_init)</span>
+<span id="cb29-58"><a href="#cb29-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-59"><a href="#cb29-59" aria-hidden="true" tabindex="-1"></a><span class="co"># ==========================================</span></span>
+<span id="cb29-60"><a href="#cb29-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3. INTERACTIVE SLIDERS</span></span>
+<span id="cb29-61"><a href="#cb29-61" aria-hidden="true" tabindex="-1"></a><span class="co"># ==========================================</span></span>
+<span id="cb29-62"><a href="#cb29-62" aria-hidden="true" tabindex="-1"></a>axcolor <span class="op">=</span> <span class="st">'lightgray'</span></span>
+<span id="cb29-63"><a href="#cb29-63" aria-hidden="true" tabindex="-1"></a>ax_a <span class="op">=</span> plt.axes([<span class="fl">0.2</span>, <span class="fl">0.15</span>, <span class="fl">0.65</span>, <span class="fl">0.03</span>], facecolor<span class="op">=</span>axcolor)</span>
+<span id="cb29-64"><a href="#cb29-64" aria-hidden="true" tabindex="-1"></a>ax_b <span class="op">=</span> plt.axes([<span class="fl">0.2</span>, <span class="fl">0.10</span>, <span class="fl">0.65</span>, <span class="fl">0.03</span>], facecolor<span class="op">=</span>axcolor)</span>
+<span id="cb29-65"><a href="#cb29-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-66"><a href="#cb29-66" aria-hidden="true" tabindex="-1"></a>slider_a <span class="op">=</span> Slider(ax_a, <span class="st">'Constant a'</span>, <span class="op">-</span><span class="fl">3.0</span>, <span class="fl">3.0</span>, valinit<span class="op">=</span>a_init)</span>
+<span id="cb29-67"><a href="#cb29-67" aria-hidden="true" tabindex="-1"></a>slider_b <span class="op">=</span> Slider(ax_b, <span class="st">'Constant b'</span>, <span class="op">-</span><span class="fl">3.0</span>, <span class="fl">3.0</span>, valinit<span class="op">=</span>b_init)</span>
+<span id="cb29-68"><a href="#cb29-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-69"><a href="#cb29-69" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update(val):</span>
+<span id="cb29-70"><a href="#cb29-70" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> slider_a.val</span>
+<span id="cb29-71"><a href="#cb29-71" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> slider_b.val</span>
+<span id="cb29-72"><a href="#cb29-72" aria-hidden="true" tabindex="-1"></a>    ax.clear()</span>
+<span id="cb29-73"><a href="#cb29-73" aria-hidden="true" tabindex="-1"></a>    Z_new <span class="op">=</span> calculate_surface(a, b, k_const)</span>
+<span id="cb29-74"><a href="#cb29-74" aria-hidden="true" tabindex="-1"></a>    ax.plot_surface(X, Y, Z_new, cmap<span class="op">=</span><span class="st">'plasma'</span>, alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb29-75"><a href="#cb29-75" aria-hidden="true" tabindex="-1"></a>    format_axes()</span>
+<span id="cb29-76"><a href="#cb29-76" aria-hidden="true" tabindex="-1"></a>    update_text(a, b)</span>
+<span id="cb29-77"><a href="#cb29-77" aria-hidden="true" tabindex="-1"></a>    fig.canvas.draw_idle()</span>
+<span id="cb29-78"><a href="#cb29-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-79"><a href="#cb29-79" aria-hidden="true" tabindex="-1"></a>slider_a.on_changed(update)</span>
+<span id="cb29-80"><a href="#cb29-80" aria-hidden="true" tabindex="-1"></a>slider_b.on_changed(update)</span>
+<span id="cb29-81"><a href="#cb29-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-82"><a href="#cb29-82" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="the-ece-bridge-what-do-a-and-b-mean-in-your-domain" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="the-ece-bridge-what-do-a-and-b-mean-in-your-domain"><span class="header-section-number">2.3.3</span> The ECE Bridge: What do ‘a’ and ‘b’ mean in your domain?</h3>
+<p>The variables <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are not just abstract numbers—they have physical meaning in your field. Consider a 2D PCB copper plane (like a ground plane). The voltage <span class="math inline">\(V(x,y)\)</span> drops linearly due to the resistance of the copper. Using Ohm’s law in 2D: <span class="math display">\[ V(x,y)=V_0-E_x\cdot x-E_y \cdot y\]</span></p>
+<p>where <span class="math inline">\(E_x\)</span> and <span class="math inline">\(E_y\)</span> are the electric field components (voltage gradients) in the x and y directions. Comparing this with our plane equation, we can see that:</p>
+<ul>
+<li><span class="math inline">\(a\)</span> corresponds to the negative of the electric field in the x-direction (<span class="math inline">\(E_x\)</span>).</li>
+<li><span class="math inline">\(b\)</span> corresponds to the negative of the electric field in the y-direction (<span class="math inline">\(E_y\)</span>).</li>
+<li><span class="math inline">\(k\)</span> represents the initial voltage <span class="math inline">\(V_0\)</span> at the origin.</li>
+</ul>
+<p>The PDE <span class="math inline">\(px+qy-z+k=0\)</span> now describes the fundamental relationship between voltage gradients and the voltage distribution in any resistive medium. This is the same math that governs current flow in your PCBs!</p>
+<p>Here is the interactive demo that shows how changing <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> (the electric field components) affects the voltage distribution across the plane.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ==========================================</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># COMPANION CODE: ECE INTERPRETATION OF PDE</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 2D Voltage Drop in a PCB Plane (Ohm's Law)</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ==========================================</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.widgets <span class="im">import</span> Slider</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>, projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>plt.subplots_adjust(bottom<span class="op">=</span><span class="fl">0.25</span>)</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="co"># PCB dimensions (in cm)</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">30</span>)</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">30</span>)</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>X, Y <span class="op">=</span> np.meshgrid(x, y)</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Physical parameters (mapped from arbitrary constants)</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="co"># a = Voltage gradient in X (V/cm)  →  E_x = -dV/dx</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="co"># b = Voltage gradient in Y (V/cm)  →  E_y = -dV/dy</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>a_init <span class="op">=</span> <span class="fl">0.5</span>  <span class="co"># V/cm</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>b_init <span class="op">=</span> <span class="fl">0.3</span>  <span class="co"># V/cm</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>V_ref <span class="op">=</span> <span class="fl">5.0</span>   <span class="co"># Reference voltage at origin (Volts)</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_pcb_voltage(a, b, V0):</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># V(x,y) = V0 - a*x - b*y  (Linear voltage drop)</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> V0 <span class="op">-</span> a <span class="op">*</span> X <span class="op">-</span> b <span class="op">*</span> Y</span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> calculate_pcb_voltage(a_init, b_init, V_ref)</span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>surf <span class="op">=</span> ax.plot_surface(X, Y, Z, cmap<span class="op">=</span><span class="st">'viridis'</span>, alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'X position on PCB (cm)'</span>)</span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Y position on PCB (cm)'</span>)</span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>ax.set_zlabel(<span class="st">'Voltage (V)'</span>)</span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'2D Voltage Distribution on a PCB Ground Plane'</span>)</span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>ax.set_zlim(<span class="dv">0</span>, <span class="dv">6</span>)</span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Info box showing ECE interpretation</span></span>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>props <span class="op">=</span> <span class="bu">dict</span>(boxstyle<span class="op">=</span><span class="st">'round'</span>, facecolor<span class="op">=</span><span class="st">'lightblue'</span>, alpha<span class="op">=</span><span class="fl">0.9</span>)</span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>text_box <span class="op">=</span> fig.text(<span class="fl">0.05</span>, <span class="fl">0.85</span>, <span class="st">''</span>, transform<span class="op">=</span>fig.transFigure, fontsize<span class="op">=</span><span class="dv">10</span>, </span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a>                    verticalalignment<span class="op">=</span><span class="st">'top'</span>, family<span class="op">=</span><span class="st">'monospace'</span>, bbox<span class="op">=</span>props)</span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_text(a, b):</span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Electric field components (negative gradient)</span></span>
+<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a>    Ex <span class="op">=</span> a   <span class="co"># E_x = -dV/dx = a</span></span>
+<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a>    Ey <span class="op">=</span> b   <span class="co"># E_y = -dV/dy = b</span></span>
+<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a>    text_str <span class="op">=</span> (<span class="ss">f"⚡ ECE Interpretation ⚡</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"Voltage gradient in X (a): </span><span class="sc">{</span>a<span class="sc">:.2f}</span><span class="ss"> V/cm</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb30-49"><a href="#cb30-49" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"Voltage gradient in Y (b): </span><span class="sc">{</span>b<span class="sc">:.2f}</span><span class="ss"> V/cm</span><span class="ch">\n\n</span><span class="ss">"</span></span>
+<span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"Electric Field Components:</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"E_x = -dV/dx = </span><span class="sc">{</span>a<span class="sc">:.2f}</span><span class="ss"> V/cm</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"E_y = -dV/dy = </span><span class="sc">{</span>b<span class="sc">:.2f}</span><span class="ss"> V/cm</span><span class="ch">\n\n</span><span class="ss">"</span></span>
+<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"📐 The PDE governing this:</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"∂V/∂x + ∂V/∂y = -(</span><span class="sc">{</span>a<span class="op">+</span>b<span class="sc">:.2f}</span><span class="ss">) V/cm</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"(This is a form of Laplace's equation)"</span>)</span>
+<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a>    text_box.set_text(text_str)</span>
+<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a>update_text(a_init, b_init)</span>
+<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Sliders (now labeled with physical units)</span></span>
+<span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a>ax_a <span class="op">=</span> plt.axes([<span class="fl">0.2</span>, <span class="fl">0.15</span>, <span class="fl">0.65</span>, <span class="fl">0.03</span>], facecolor<span class="op">=</span><span class="st">'lightgray'</span>)</span>
+<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a>ax_b <span class="op">=</span> plt.axes([<span class="fl">0.2</span>, <span class="fl">0.10</span>, <span class="fl">0.65</span>, <span class="fl">0.03</span>], facecolor<span class="op">=</span><span class="st">'lightgray'</span>)</span>
+<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a>slider_a <span class="op">=</span> Slider(ax_a, <span class="st">'Gradient a (V/cm)'</span>, <span class="fl">0.0</span>, <span class="fl">1.5</span>, valinit<span class="op">=</span>a_init)</span>
+<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>slider_b <span class="op">=</span> Slider(ax_b, <span class="st">'Gradient b (V/cm)'</span>, <span class="fl">0.0</span>, <span class="fl">1.5</span>, valinit<span class="op">=</span>b_init)</span>
+<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-67"><a href="#cb30-67" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update(val):</span>
+<span id="cb30-68"><a href="#cb30-68" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> slider_a.val</span>
+<span id="cb30-69"><a href="#cb30-69" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> slider_b.val</span>
+<span id="cb30-70"><a href="#cb30-70" aria-hidden="true" tabindex="-1"></a>    ax.clear()</span>
+<span id="cb30-71"><a href="#cb30-71" aria-hidden="true" tabindex="-1"></a>    Z_new <span class="op">=</span> calculate_pcb_voltage(a, b, V_ref)</span>
+<span id="cb30-72"><a href="#cb30-72" aria-hidden="true" tabindex="-1"></a>    ax.plot_surface(X, Y, Z_new, cmap<span class="op">=</span><span class="st">'viridis'</span>, alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb30-73"><a href="#cb30-73" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'X position on PCB (cm)'</span>)</span>
+<span id="cb30-74"><a href="#cb30-74" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'Y position on PCB (cm)'</span>)</span>
+<span id="cb30-75"><a href="#cb30-75" aria-hidden="true" tabindex="-1"></a>    ax.set_zlabel(<span class="st">'Voltage (V)'</span>)</span>
+<span id="cb30-76"><a href="#cb30-76" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="st">'2D Voltage Distribution on a PCB Ground Plane'</span>)</span>
+<span id="cb30-77"><a href="#cb30-77" aria-hidden="true" tabindex="-1"></a>    ax.set_zlim(<span class="dv">0</span>, <span class="dv">6</span>)</span>
+<span id="cb30-78"><a href="#cb30-78" aria-hidden="true" tabindex="-1"></a>    update_text(a, b)</span>
+<span id="cb30-79"><a href="#cb30-79" aria-hidden="true" tabindex="-1"></a>    fig.canvas.draw_idle()</span>
+<span id="cb30-80"><a href="#cb30-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-81"><a href="#cb30-81" aria-hidden="true" tabindex="-1"></a>slider_a.on_changed(update)</span>
+<span id="cb30-82"><a href="#cb30-82" aria-hidden="true" tabindex="-1"></a>slider_b.on_changed(update)</span>
+<span id="cb30-83"><a href="#cb30-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-84"><a href="#cb30-84" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="day-1-skills-map-to-module-i" class="level3" data-number="2.3.4">
+<h3 data-number="2.3.4" class="anchored" data-anchor-id="day-1-skills-map-to-module-i"><span class="header-section-number">2.3.4</span> Day-1 Skills Map to Module-I</h3>
+<p>Before we jump into the challenges, look at how your practice tasks prepared you for this:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Day-1 Skill</th>
+<th style="text-align: left;">How it applies to Module-I PDEs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">T-1 (Sine wave with <code>np.linspace</code>)</td>
+<td style="text-align: left;">You will use np.linspace to create spatial grids (x, y) for 2D PDE problems.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">T-3 (Robot arm kinematics)</td>
+<td style="text-align: left;">Finding the “characteristic curves” in Lagrange’s method is exactly like following the robot’s joints—you trace a path to find the solution.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">T-4 (Rotation matrix)</td>
+<td style="text-align: left;">Changing variables in PDEs (like separation of variables) is a coordinate transformation, just like rotating a sensor frame!</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">T-5 (Moving average filter)</td>
+<td style="text-align: left;">Numerical methods for PDEs (like Finite Difference) use sliding windows over the grid, similar to your filtering loop.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>sympy.pdsolve</code> (Basic example)</td>
+<td style="text-align: left;">You already solved ∂u/∂x + ∂u/∂t = 0. Now you will solve real engineering PDEs.</td>
+</tr>
+</tbody>
+</table>
 
 
 </section>
